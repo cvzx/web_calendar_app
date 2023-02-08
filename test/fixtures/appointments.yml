@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  appointment: MyString
+  title: MyString
+  description: MyText
+  date_range: 
+
+two:
+  appointment: MyString
+  title: MyString
+  description: MyText
+  date_range: 
