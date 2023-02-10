@@ -3,34 +3,36 @@
 class Appointments
   class << self
     def all
-      # return all appointments
       Appointment.all
     end
 
     def find(id)
-      # find appointment by id
       Appointment.find(id)
     end
 
     def create(params)
       # validate params
-      # create appointment in repo
-      Appointment.create!(params)
+      title = params['title']
+      description = params['desc']
+      datetime_range = DateTime.parse(params['start'])..DateTime.parse(params['end'])
+
+      Appointment.create!(title:, description:, datetime_range:)
     end
 
-    def update(params)
-      # find appointment by id
+    def update(id, params)
       # validate params
-      # update appointment in repo
-      appointment = find(params.slice(:id))
-      appointment.update!(params)
+      appointment = find(id)
+
+      title = params['title']
+      description = params['desc']
+      datetime_range = DateTime.parse(params['start'])..DateTime.parse(params['end'])
+
+      appointment.update!(title:, description:, datetime_range:)
     end
 
     def destroy(id)
-      # find appointment by id
-      # delete appointment in repo
-      appointment = find(params.slice(:id))
-      appointment.destroy!(params)
+      appointment = find(id)
+      appointment.destroy!
     end
   end
 end
