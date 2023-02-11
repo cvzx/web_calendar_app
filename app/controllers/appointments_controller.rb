@@ -1,4 +1,6 @@
 class AppointmentsController < ApplicationController
+  before_action :authenticate_request
+
   def index
     appointments = Appointments.all
 
@@ -31,5 +33,15 @@ class AppointmentsController < ApplicationController
 
   def decorator_class
     AppointmentDecorator
+  end
+
+  def authenticate_request
+    user = Authentication.authenticate_by_token(request.headers['Auth'])
+
+    if user.present?
+      @current_user = user
+    else
+      render json: { error: 'Not Authorized' }, status: :unauthorized
+    end
   end
 end
