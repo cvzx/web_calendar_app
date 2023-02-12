@@ -21,7 +21,7 @@ class Authentication
     private
 
     def decode_token(token)
-      JWT.decode(token, SECRET_KEY)[0]
+      JWT.decode(token.gsub('Bearer ', ''), SECRET_KEY)[0]
     end
   end
 end

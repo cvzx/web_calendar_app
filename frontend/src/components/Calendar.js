@@ -25,7 +25,8 @@ class Calendar extends Component {
       desc: "",
       openSlot: false,
       openEvent: false,
-      clickedEvent: {}
+      clickedEvent: {},
+      token: localStorage.getItem('token')
     };
 
     this.handleClose = this.handleClose.bind(this);
@@ -73,21 +74,21 @@ class Calendar extends Component {
   };
 
   async setNewAppointment() {
-    const { start, end, title, desc } = this.state;
+    const { start, end, title, desc, token } = this.state;
     let appointment = { title, start, end, desc };
     let events = this.state.events.slice();
     events.push(appointment);
     this.setState({ events });
 
     try {
-      await axios.post('/appointments', appointment);
+      await axios.post('/appointments', appointment, { headers: { Auth: `Bearer ${token}` } });
     } catch(error) {
       console.error(error);
     }
   }
 
   async updateEvent() {
-    const { title, desc, start, end, events, clickedEvent } = this.state;
+    const { title, desc, start, end, events, clickedEvent, token } = this.state;
     const index = events.findIndex(event => event === clickedEvent);
     const updatedEvent = events.slice();
 
@@ -104,45 +105,57 @@ class Calendar extends Component {
         desc,
         start,
         end
-      });
+      }, { headers: { Auth: `Bearer ${token}` } });
     } catch(error) {
       console.error(error);
     }
   }
 
   async handleEventChangeBoundries({ event, start, end }) {
-    const index = this.state.events.findIndex(ev => ev.id === event.id);
-    const updatedEvent = this.state.events.slice();
+    const { token, events } = this.state;
+    const { title, desc } = event
+    const index = events.findIndex(ev => ev.id === event.id);
+    const updatedEvent = events.slice();
 
     updatedEvent[index].start = start;
     updatedEvent[index].end = end;
 
+    console.log(updatedEvent[index])
+
     this.setState({ events: updatedEvent });
 
     try {
-      await axios.put(`/appointments/${event.id}`, { start, end });
+      await axios.put(`/appointments/${event.id}`,
+        { title, desc, start, end },
+        { headers: { Auth: `Bearer ${token}` }}
+      );
     } catch(error) {
       console.error(error);
     }
   }
 
   async deleteEvent() {
-    let event_id = this.state.clickedEvent.id
-    let updatedEvents = this.state.events.filter(
+    const { clickedEvent, token, events } = this.state;
+    const event_id = clickedEvent.id
+
+    let updatedEvents = events.filter(
       event => event.id !== event_id
     );
+
     this.setState({ events: updatedEvents });
 
     try {
-      await axios.delete(`/appointments/${event_id}`);
+      await axios.delete(`/appointments/${clickedEvent.id}`, { headers: { Auth: `Bearer ${token}` } });
     } catch(error) {
       console.error(error);
     }
   }
 
   loadEvents() {
+    const token = this.state.token
+
     axios
-      .get("/appointments")
+      .get("/appointments", { headers: { Auth: `Bearer ${token}` } })
       .then(response => {
         let events = response.data.appointments.map(event => {
           return Object.assign({}, event, {
