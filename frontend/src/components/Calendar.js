@@ -76,13 +76,23 @@ class Calendar extends Component {
 
   async setNewAppointment() {
     const { start, end, title, desc, token } = this.state;
-    let appointment = { title, start, end, desc };
+    const appointment = { title, start, end, desc };
     let events = this.state.events.slice();
+
     events.push(appointment);
     this.setState({ events });
 
     try {
-      await axios.post(`${BACKEND_API_URL}/appointments`, appointment, { headers: { Auth: `Bearer ${token}` } });
+      await axios.post(`${BACKEND_API_URL}/appointments`,
+        {
+          title,
+          description: desc,
+          start_date: start,
+          end_date: end
+        },
+        {
+          headers: { Auth: `Bearer ${token}` }
+        });
     } catch(error) {
       console.error(error);
     }
@@ -101,12 +111,16 @@ class Calendar extends Component {
     this.setState({ events: updatedEvent });
 
     try {
-      await axios.put(`${BACKEND_API_URL}/appointments/${updatedEvent[index].id}`, {
-        title,
-        desc,
-        start,
-        end
-      }, { headers: { Auth: `Bearer ${token}` } });
+      await axios.put(`${BACKEND_API_URL}/appointments/${updatedEvent[index].id}`,
+        {
+          title,
+          description: desc,
+          start_date: start,
+          end_date: end
+        },
+        {
+          headers: { Auth: `Bearer ${token}` }
+        });
     } catch(error) {
       console.error(error);
     }
@@ -127,8 +141,15 @@ class Calendar extends Component {
 
     try {
       await axios.put(`${BACKEND_API_URL}/appointments/${event.id}`,
-        { title, desc, start, end },
-        { headers: { Auth: `Bearer ${token}` }}
+        {
+          title,
+          description: desc,
+          start_date: start,
+          end_date: end
+        },
+        {
+          headers: { Auth: `Bearer ${token}` }
+        }
       );
     } catch(error) {
       console.error(error);
@@ -146,7 +167,10 @@ class Calendar extends Component {
     this.setState({ events: updatedEvents });
 
     try {
-      await axios.delete(`${BACKEND_API_URL}/appointments/${clickedEvent.id}`, { headers: { Auth: `Bearer ${token}` } });
+      await axios.delete(`${BACKEND_API_URL}/appointments/${clickedEvent.id}`,
+        {
+          headers: { Auth: `Bearer ${token}` }
+        });
     } catch(error) {
       console.error(error);
     }

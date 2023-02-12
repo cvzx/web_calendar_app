@@ -2,33 +2,37 @@ class AppointmentsController < ApplicationController
   before_action :authenticate_request
 
   def index
-    appointments = Appointments.find_by_user(@current_user)
+    appointments = appointment_service.list_all
 
     render json: { appointments: decorate_collection(appointments) }
   end
 
   def create
-    Appointments.create(@current_user, appointment_params)
+    appointment_service.create(appointment_params)
 
     head :ok
   end
 
   def update
-    Appointments.update(params[:id], @current_user, appointment_params)
+    appointment_service.update(params[:id], appointment_params)
 
     head :ok
   end
 
   def destroy
-    Appointments.destroy(params[:id], @current_user)
+    appointment_service.destroy(params[:id])
 
     head :ok
   end
 
   private
 
+  def appointment_service
+    @appointment_service ||= AppointmentsService.new(@current_user)
+  end
+
   def appointment_params
-    params.permit(:title, :desc, :start, :end)
+    params.permit(:title, :description, :start_date, :end_date)
   end
 
   def decorator_class
