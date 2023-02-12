@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
 
 class Login extends Component {
   state = {
     username: '',
-    password: '',
-    errorMessage: '',
+    password: ''
   };
 
   handleSubmit = async (event) => {
@@ -20,43 +21,25 @@ class Login extends Component {
 
       onLogin({username, token})
     } catch (error) {
-      this.setState({ errorMessage: error });
+      console.log(error);
     }
   };
 
-  handleUsernameChange = (event) => {
-    this.setState({ username: event.target.value });
-  };
-
-  handlePasswordChange = (event) => {
-    this.setState({ password: event.target.value });
-  };
-
   render() {
-    const { username, password, errorMessage } = this.state;
-
     return (
       <form onSubmit={this.handleSubmit}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={this.handleUsernameChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={this.handlePasswordChange}
-          />
-        </div>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-        <button type="submit">Login</button>
+        <TextField
+          floatingLabelText="Username"
+          onChange={(event) => this.setState({ username: event.target.value })}
+        />
+        <TextField
+          floatingLabelText="Password"
+          type="password"
+          onChange={(event) => this.setState({ password: event.target.value })}
+        />
+        <FlatButton label="Sign In"
+          primary={true}
+          onClick={(event)=> { this.handleSubmit(event) }} />
       </form>
     );
   }

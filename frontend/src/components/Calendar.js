@@ -3,10 +3,10 @@ import moment from 'moment';
 import axios from "axios";
 import  { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
-import Dialog from "material-ui/Dialog";
-import FlatButton from "material-ui/FlatButton";
-import TextField from "material-ui/TextField";
-import TimePicker from "material-ui/TimePicker";
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
+import TimePicker from 'material-ui/TimePicker';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'

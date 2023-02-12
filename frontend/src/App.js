@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import Calendar from "./components/Calendar";
 import Login from "./components/Login";
+import FlatButton from 'material-ui/FlatButton';
 
 class App extends Component {
   state = {
@@ -33,8 +34,10 @@ class App extends Component {
         ) : (
           <div>
             <div>
-              <p>Welcome, {username}!</p>
-              <button onClick={this.handleLogout}>Logout</button>
+              {username}
+              <FlatButton label="Logout"
+                primary={true}
+                onClick={()=> { this.handleLogout() }} />
             </div>
             <Calendar />
           </div>
