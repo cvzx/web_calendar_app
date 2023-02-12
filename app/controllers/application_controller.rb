@@ -10,4 +10,14 @@ class ApplicationController < ActionController::API
   def decorator_class
     raise NotImplemented
   end
+
+  def authenticate_request
+    user = Authentication.authenticate_by_token(request.headers['Auth'])
+
+    if user.present?
+      @current_user_id = user.id
+    else
+      render json: { error: 'Not Authorized' }, status: :unauthorized
+    end
+  end
 end

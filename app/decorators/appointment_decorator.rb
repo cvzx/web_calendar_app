@@ -3,11 +3,11 @@
 class AppointmentDecorator < SimpleDelegator
   def as_json(_args)
     {
-      id: id,
-      title: title,
+      id:,
+      title:,
       desc: description,
-      start: datetime_range.first,
-      end: datetime_range.last
+      start: start_date,
+      end: end_date
     }
   end
 end

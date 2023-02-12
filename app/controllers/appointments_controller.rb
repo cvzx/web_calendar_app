@@ -2,7 +2,7 @@ class AppointmentsController < ApplicationController
   before_action :authenticate_request
 
   def index
-    appointments = Appointments.all
+    appointments = Appointments.find_by_user(@current_user_id)
 
     render json: { appointments: decorate_collection(appointments) }
   end
@@ -20,6 +20,7 @@ class AppointmentsController < ApplicationController
   end
 
   def destroy
+    # TODO check user id
     Appointments.destroy(params[:id])
 
     head :ok
@@ -28,20 +29,10 @@ class AppointmentsController < ApplicationController
   private
 
   def appointment_params
-    params.permit(:title, :desc, :start, :end)
+    params.permit(:title, :desc, :start, :end).merge(user_id: @current_user_id)
   end
 
   def decorator_class
     AppointmentDecorator
-  end
-
-  def authenticate_request
-    user = Authentication.authenticate_by_token(request.headers['Auth'])
-
-    if user.present?
-      @current_user = user
-    else
-      render json: { error: 'Not Authorized' }, status: :unauthorized
-    end
   end
 end

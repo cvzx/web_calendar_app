@@ -10,24 +10,26 @@ class Appointments
       Appointment.find(id)
     end
 
+    def find_by_user(user_id)
+      Appointment.where(user_id:)
+    end
+
     def create(params)
       # validate params
-      title = params['title']
-      description = params['desc']
-      datetime_range = DateTime.parse(params['start'])..DateTime.parse(params['end'])
+      params = params.to_h.symbolize_keys
+      params => {user_id: user_id, title: title, desc: description, start: start_date, end: end_date}
 
-      Appointment.create!(title:, description:, datetime_range:)
+      Appointment.create!(title:, description:, start_date:, end_date:, user_id:)
     end
 
     def update(id, params)
       # validate params
       appointment = find(id)
 
-      title = params['title']
-      description = params['desc']
-      datetime_range = DateTime.parse(params['start'])..DateTime.parse(params['end'])
+      params = params.to_h.symbolize_keys
+      params => {user_id: user_id, title: title, desc: description, start: start_date, end: end_date}
 
-      appointment.update!(title:, description:, datetime_range:)
+      appointment.update!(title:, description:, start_date:, end_date:, user_id:)
     end
 
     def destroy(id)
