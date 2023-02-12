@@ -15,7 +15,7 @@ class ApplicationController < ActionController::API
     user = Authentication.authenticate_by_token(request.headers['Auth'])
 
     if user.present?
-      @current_user_id = user.id
+      @current_user = user
     else
       render json: { error: 'Not Authorized' }, status: :unauthorized
     end
