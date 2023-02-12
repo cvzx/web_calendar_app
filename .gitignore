@@ -13,6 +13,7 @@
 /dcnvim.yml
 /Dockerfile.dev
 /Dockerfile.nvim
+node_modules
 
 # Ignore all logfiles and tempfiles.
 /log/*

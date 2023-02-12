@@ -7,9 +7,10 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import TimePicker from 'material-ui/TimePicker';
-
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
+
+const BACKEND_API_URL = process.env.BACKEND_API_URL || "http://localhost:3000"
 
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(BigCalendar)
@@ -81,7 +82,7 @@ class Calendar extends Component {
     this.setState({ events });
 
     try {
-      await axios.post('/appointments', appointment, { headers: { Auth: `Bearer ${token}` } });
+      await axios.post(`${BACKEND_API_URL}/appointments`, appointment, { headers: { Auth: `Bearer ${token}` } });
     } catch(error) {
       console.error(error);
     }
@@ -100,7 +101,7 @@ class Calendar extends Component {
     this.setState({ events: updatedEvent });
 
     try {
-      await axios.put(`/appointments/${updatedEvent[index].id}`, {
+      await axios.put(`${BACKEND_API_URL}/appointments/${updatedEvent[index].id}`, {
         title,
         desc,
         start,
@@ -125,7 +126,7 @@ class Calendar extends Component {
     this.setState({ events: updatedEvent });
 
     try {
-      await axios.put(`/appointments/${event.id}`,
+      await axios.put(`${BACKEND_API_URL}/appointments/${event.id}`,
         { title, desc, start, end },
         { headers: { Auth: `Bearer ${token}` }}
       );
@@ -145,7 +146,7 @@ class Calendar extends Component {
     this.setState({ events: updatedEvents });
 
     try {
-      await axios.delete(`/appointments/${clickedEvent.id}`, { headers: { Auth: `Bearer ${token}` } });
+      await axios.delete(`${BACKEND_API_URL}/appointments/${clickedEvent.id}`, { headers: { Auth: `Bearer ${token}` } });
     } catch(error) {
       console.error(error);
     }
@@ -155,7 +156,7 @@ class Calendar extends Component {
     const token = this.state.token
 
     axios
-      .get("/appointments", { headers: { Auth: `Bearer ${token}` } })
+      .get(`${BACKEND_API_URL}/appointments`, { headers: { Auth: `Bearer ${token}` } })
       .then(response => {
         let events = response.data.appointments.map(event => {
           return Object.assign({}, event, {

@@ -40,14 +40,13 @@ class Appointments
 
     def populate_attributes(params)
       params.to_h.symbolize_keys => {
-        user_id: user_id,
         title: title,
         desc: description,
         start: start_date,
         end: end_date
       }
 
-      { user_id:, title:, description:, start_date:, end_date: }
+      { title:, description:, start_date:, end_date: }
     end
   end
 end

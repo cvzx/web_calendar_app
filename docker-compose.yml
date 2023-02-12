@@ -1,12 +1,13 @@
 version: '3.7'
 
 services:
-  web:
+  backend:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.backend
     volumes:
       - .:/app:cached
+    user: "${UID}:${GID}"
     ports:
       - "3000:3000"
     tty: true
@@ -14,12 +15,19 @@ services:
     depends_on:
       - db
 
-  react:
+  frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.react
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
     volumes:
-      - ./react:/app:cached
+      - ./frontend:/app:cached
+    user: "${UID}:${GID}"
+    ports:
+      - "3001:3001"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - backend
 
   db:
     image: postgres:latest

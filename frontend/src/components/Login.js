@@ -3,6 +3,8 @@ import axios from 'axios';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
+const BACKEND_API_URL = "http://localhost:3000"
+
 class Login extends Component {
   state = {
     username: '',
@@ -15,7 +17,10 @@ class Login extends Component {
     const { username, password } = this.state;
 
     try {
-      const response = await axios.post('/auth/login', { username, password });
+      const response = await axios.post(`${BACKEND_API_URL}/auth/login`, {
+        username,
+        password
+      });
       const token = response.data.token;
       const { onLogin } = this.props;
 
