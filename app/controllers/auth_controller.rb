@@ -1,14 +1,11 @@
 class AuthController < ApplicationController
   def login
-    user = Authentication.authenticate_by_credentials(username, password)
+    user = auth_service.auth_by_credentials(username, password)
+    auth_token = auth_service.generate_auth_token(user)
 
-    if user.present?
-      token = Authentication.generate_auth_token(user)
-
-      render json: { token: }, status: :ok
-    else
-      render json: { error: 'Invalid email or password' }, status: :unauthorized
-    end
+    render json: { token: auth_token}, status: :ok
+  rescue AuthenticationService::AuthError => e
+    render json: { error: e.message }, status: :unauthorized
   end
 
   def auth_params
@@ -21,5 +18,9 @@ class AuthController < ApplicationController
 
   def password
     auth_params[:password]
+  end
+
+  def auth_service
+    AuthenticationService
   end
 end
