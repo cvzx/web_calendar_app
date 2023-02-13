@@ -11,12 +11,16 @@ class AppointmentsController < ApplicationController
     appointment_service.create(appointment_params)
 
     head :ok
+  rescue AppointmentsService::ValidationError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def update
     appointment_service.update(params[:id], appointment_params)
 
     head :ok
+  rescue AppointmentsService::ValidationError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def destroy

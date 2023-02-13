@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class AppointmentsService
-  def initialize(user, repo = Appointment)
+  class ValidationError < StandardError; end
+
+  def initialize(user, repo = Appointment, validator = Appointment)
     @user = user
     @repo = repo
+    @validator = validator
   end
 
   def list_all
@@ -17,11 +20,16 @@ class AppointmentsService
   def create(params)
     create_params = params.merge(user_id: user.id)
 
-    repo.create!(create_params)
+    validate_params!(create_params)
+
+    repo.create(create_params)
   end
 
   def update(id, params)
     appointment = find_by_id(id)
+    update_params = params.merge(appointment.attributes)
+
+    validate_params!(update_params)
 
     appointment.update!(params)
   end
@@ -34,5 +42,13 @@ class AppointmentsService
 
   private
 
-  attr_reader :user, :repo
+  attr_reader :user, :repo, :validator
+
+  def validate_params!(params)
+    validation = validator.new(params)
+
+    return if validation.valid?
+
+    raise ValidationError, validation.errors.full_messages.join(',')
+  end
 end
