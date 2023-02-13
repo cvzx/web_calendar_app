@@ -10,6 +10,8 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-*
+/backend/db/*.sqlite3
+/backend/db/*.sqlite3-*
 /dcnvim.yml
 /Dockerfile.dev
 /Dockerfile.nvim
@@ -20,11 +22,18 @@ node_modules
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+/backend/log/*
+/backend/tmp/*
+!/backend/log/.keep
+!/backend/tmp/.keep
 
 # Ignore pidfiles, but keep the directory.
 /tmp/pids/*
 !/tmp/pids/
 !/tmp/pids/.keep
+/backend/tmp/pids/*
+!/backend/tmp/pids/
+!/backend/tmp/pids/.keep
 
 # Ignore uploaded files in development.
 /storage/*
@@ -32,8 +41,16 @@ node_modules
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
+/backend/storage/*
+!/backend/storage/.keep
+/backend/tmp/storage/*
+!/backend/tmp/storage/
+!/backend/tmp/storage/.keep
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /tags
 /tmp
+/backend/config/master.key
+/backend/tags
+/backend/tmp

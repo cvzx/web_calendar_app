@@ -3,10 +3,10 @@ version: '3.7'
 services:
   backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile.backend
     volumes:
-      - .:/app:cached
+      - ./backend:/app:cached
     user: "${UID}:${GID}"
     ports:
       - "3000:3000"
