@@ -27,11 +27,11 @@ class AppointmentsService
 
   def update(id, params)
     appointment = find_by_id(id)
-    update_params = params.merge(appointment.attributes)
+    update_params = appointment.attributes.merge(params)
 
     validate_params!(update_params)
 
-    appointment.update!(params)
+    appointment.update(params)
   end
 
   def destroy(id)

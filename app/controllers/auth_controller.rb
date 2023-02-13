@@ -1,11 +1,9 @@
 class AuthController < ApplicationController
   def login
-    user = auth_service.auth_by_credentials(username, password)
-    auth_token = auth_service.generate_auth_token(user)
+    user = AuthenticationService.auth_by_credentials(username, password)
+    auth_token = AuthenticationService.generate_auth_token(user)
 
     render json: { token: auth_token}, status: :ok
-  rescue AuthenticationService::AuthError => e
-    render json: { error: e.message }, status: :unauthorized
   end
 
   def auth_params
@@ -18,9 +16,5 @@ class AuthController < ApplicationController
 
   def password
     auth_params[:password]
-  end
-
-  def auth_service
-    AuthenticationService
   end
 end

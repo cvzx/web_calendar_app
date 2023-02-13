@@ -1,5 +1,6 @@
 class AppointmentsController < ApplicationController
-  before_action :authenticate_request
+  include Authenticable
+  include Decorators
 
   def index
     appointments = appointment_service.list_all
@@ -11,16 +12,12 @@ class AppointmentsController < ApplicationController
     appointment_service.create(appointment_params)
 
     head :ok
-  rescue AppointmentsService::ValidationError => e
-    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def update
     appointment_service.update(params[:id], appointment_params)
 
     head :ok
-  rescue AppointmentsService::ValidationError => e
-    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def destroy
@@ -32,7 +29,7 @@ class AppointmentsController < ApplicationController
   private
 
   def appointment_service
-    @appointment_service ||= AppointmentsService.new(@current_user)
+    @appointment_service ||= AppointmentsService.new(current_user)
   end
 
   def appointment_params
